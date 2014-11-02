@@ -1,0 +1,46 @@
+---
+- name: Install packages pre-requisites
+  apt: name={{ item }} state=latest
+  with_items:
+    - autoconf
+    - automake
+    - autopoint
+    - build-essential
+    - git
+    - help2man
+    - m4
+    - texinfo
+
+    
+- name: Get Bison sources
+  git: repo=git://git.savannah.gnu.org/bison.git dest="{{ bison_path }}" version="{{ bison_tag }}" accept_hostkey=yes
+
+- name: Copying missing files to the repository
+  copy: src="{{ item }}" dest="{{ bison_path }}/src/{{ item }}" owner=root group=root mode=0644
+  with_items:
+    - scan-code.c
+    - scan-gram.c
+    - scan-skel.c
+
+- name: Build configuration
+  shell: "{{ bison_path }}/bootstrap"
+  args:
+    chdir: "{{ bison_path }}"
+
+- name: Configure
+  shell: "{{ bison_path }}/configure"
+  args:
+    chdir: "{{ bison_path }}"
+
+- name: Make
+  command: make
+  args:
+    chdir: "{{ bison_path }}"
+
+- name: Make install
+  command: make install
+  args:
+    chdir: "{{ bison_path }}"
+
+
+
