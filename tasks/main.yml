@@ -13,7 +13,7 @@
 
     
 - name: Get Bison sources
-  git: repo=git://git.savannah.gnu.org/bison.git dest="{{ bison_path }}" version="{{ bison_tag }}" accept_hostkey=yes
+  git: repo=git://git.savannah.gnu.org/bison.git dest="{{ bison_path }}" version="{{ bison_tag }}" accept_hostkey=yes force=yes
 
 - name: Copying missing files to the repository
   copy: src="{{ item }}" dest="{{ bison_path }}/src/{{ item }}" owner=root group=root mode=0644
